@@ -10,11 +10,11 @@ call set_screen_size
 call clear_screen
 mov si,welcome
 call print_msg
-call init_wait
+call load_second_bootloader
 jmp 0x9000
 cli
 hlt
 %include "routines.asm"
-welcome db "Welcome to BazeengaOS",0
+welcome db "Getting the OS...",0
 times 510-($-$$) db 0
 dw 0xaa55

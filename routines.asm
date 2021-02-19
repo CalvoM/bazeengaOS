@@ -17,7 +17,7 @@ set_cursor_center:
     mov dh,0
     mov dl, 0
     int 0x10
-    rett
+    ret
 print_msg:
     lodsb
     or al,al
@@ -29,9 +29,21 @@ done:
     ret
 init_wait:
     pusha
-    mov cx,0x4c
-    mov dx,0x4b40
+    mov cx,0x1e
+    mov dx,0x8480
     mov ah,0x86
     int 0x15
+    popa
+    ret
+load_second_bootloader:
+    pusha
+   	mov ah, 0x02
+	mov al, dh
+	mov ch, 0x00
+	mov dh, 0x00
+	mov cl, 0x02
+    mov dl,0x80
+    ;mov bx,0x9000
+	int 0x13
     popa
     ret
