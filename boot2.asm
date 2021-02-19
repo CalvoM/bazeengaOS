@@ -1,0 +1,10 @@
+use16
+org 0x9000
+
+mov ah,0x07
+mov al,0x00
+mov bh,0x0e 
+mov dh,30
+mov dl,79
+int 0x10
+hlt

@@ -6,15 +6,16 @@ set_screen_size:
 clear_screen:
     mov ah,0x07
     mov al,0x00
-    mov bh,0x0f 
+    mov bh,0xe0 
     mov dh,30
     mov dl,79
     int 0x10
     ret
 set_cursor_center:
     mov ah,0x02
-    mov dh,14
-    mov dl, 30
+    mov bh,0x00
+    mov dh,0
+    mov dl, 0
     int 0x10
     rett
 print_msg:
@@ -22,8 +23,15 @@ print_msg:
     or al,al
     jz done
     mov ah,0x0e
-    mov cl,0x5
     int 0x10
     jmp print_msg
 done:
+    ret
+init_wait:
+    pusha
+    mov cx,0x4c
+    mov dx,0x4b40
+    mov ah,0x86
+    int 0x15
+    popa
     ret
