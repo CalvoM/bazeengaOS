@@ -29,21 +29,68 @@ done:
     ret
 init_wait:
     pusha
-    mov cx,0x1e
-    mov dx,0x8480
+loop_time:
+    mov cx,0x0f
+    mov dx,0x4240
     mov ah,0x86
     int 0x15
+    dec bx
+    cmp bx,0x00
+    jnz loop_time
     popa
     ret
 load_second_bootloader:
-    pusha
+    push dx
    	mov ah, 0x02
-	mov al, dh
-	mov ch, 0x00
-	mov dh, 0x00
-	mov cl, 0x02
-    mov dl,0x80
-    ;mov bx,0x9000
+	mov al, dh ;number of sector to read
+	mov ch, 0x00;cylinder no.
+	mov dh, 0x00;head number
+	mov cl, 0x03;sector no. since boot.asm has 2 sectors mbr+512 bytes of 0x00
+    ;mov dl,[boot_drive];drive number
 	int 0x13
-    popa
+    jc disk_error
+    pop dx
+    cmp dh,al
+    jne disk_error_header
     ret
+print_hex:
+    mov bx,dx
+    and bx,0x000f
+    cmp bl,0x09
+    jg print_letter
+    add bx,0x30
+    mov ah,0x0e
+    mov al,bl
+    int 0x10
+    shr dx,4
+    rol dx,8
+    and dx,dx
+    jnz print_hex
+    ret
+print_letter:
+    sub bl,0x09
+    dec bl
+    add bl,0x61
+    mov ah,0x0e
+    mov al,bl
+    int 0x10
+    shr dx,4
+    rol dx,8
+    and dx,dx
+    jnz print_hex
+    ret
+
+disk_error:
+    mov si,dsk_err_msg
+    call print_msg
+    jmp $
+disk_error_header:
+    mov si,dsk_err_head_msg
+    call print_msg
+    jmp $
+
+
+dsk_err_msg db "[DISK] Loading error",0
+dsk_err_head_msg db "Header loading error",0
+buf dw 0x0031
+sec dd 0x000f4240

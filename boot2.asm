@@ -1,14 +1,10 @@
-org 0x9000
-use16
-call set_screen_size
-; mov ah,0x07
-; mov al,0x00
-; mov bh,0xef 
-; mov dh,30
-; mov dl,79
-; int 0x10
-mov si, os_msg
-call print_msg
+[org 0x9000]
+Boot2:
+    call set_screen_size
+    call clear_screen
+    mov si, os_msg
+    call print_msg
+    jmp $
 %include "routines.asm"
-os_msg db "Bazzenga Os"
+os_msg db 0x0a,0x0d,"This is Bazzenga Os",0
 times ((0x200) - ($ - $$)) db 0x00
