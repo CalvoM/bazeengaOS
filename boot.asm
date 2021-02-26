@@ -12,7 +12,7 @@ mov dh,0x01
 xor ax,ax
 mov dl,[boot_drive]
 push bx
-mov bx,0x02 ;minor delay
+mov bx,0x01 ;minor delay
 call init_wait
 pop bx
 call load_second_bootloader
