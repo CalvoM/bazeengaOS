@@ -8,7 +8,7 @@ clear_screen:
     mov al,0x00
     mov bh,0xe0 
     mov dh,30
-    mov dl,79
+    mov dl,80
     int 0x10
     ret
 set_cursor_center:
