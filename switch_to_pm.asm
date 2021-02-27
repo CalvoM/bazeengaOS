@@ -23,4 +23,10 @@ pm_init:
 begin_pm:
     mov ebx, os_prot_msg
     call print_string_pm
+    jmp kern_offset
     jmp $
+
+%include "gdt_def.asm"
+%include "print_string_pm.asm"
+os_prot_msg db "We are safe and secure!",0
+kern_offset equ 0x1000

@@ -15,11 +15,14 @@ push bx
 mov bx,0x01 ;minor delay
 call init_wait
 pop bx
-call load_second_bootloader
+mov cl,2 ;sector to load from
+call load_to_memory
+mov cl,[boot_drive]
 jmp boot_two_addr
+
 %include "routines.asm"
+
 boot_drive: db 0
 boot_two_addr equ 0x9000
 times 510-($-$$) db 0
 dw 0xaa55
-times 512 db 0x00
