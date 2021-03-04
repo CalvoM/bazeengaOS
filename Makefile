@@ -1,20 +1,22 @@
+c_sources = $(wildcard kernel/*.c drivers/*.c)
+headers = $(wildcard kernel/*.h drivers/*.h)
+obj = ${c_sources:.c=.o}
 all : os.img
 run : all
 		qemu-system-x86_64 -s -drive format=raw,file=os.img
-os.img : boot.img kernel.bin
-		cat boot.img kernel.bin > os.img
-kernel.bin : kern_entry.o kernel.o
-		ld -m elf_i386 -o kernel.bin -Tkernel.ld kern_entry.o kernel.o --oformat binary
-kern_entry.o : kern_entry.asm
-		nasm -f elf kern_entry.asm -o kern_entry.o
-kernel.o : kernel.c
-		gcc -m32 -ffreestanding -fno-pic -c kernel.c -o kernel.o
-boot.img : boot.com boot2.com
-		dd if=boot.com of=boot.img bs=512 count=1
-		dd if=boot2.com of=boot.img bs=512 seek=1
-boot.com : boot.asm
-		nasm -f bin boot.asm -o boot.com
-boot2.com : boot2.asm
-		nasm -f bin boot2.asm -o boot2.com
+os.img : boot/boot.img kernel/kernel.bin
+		cat $^ > os.img
+%.bin : kernel/kern_entry.o ${obj}
+		ld -m elf_i386 -o $@ -Tkernel/kernel.ld $^ --oformat binary
+%.o : %.c ${HEADERS}
+		gcc -m32 -ffreestanding -fno-pic -c $< -o $@
+%.o : %.asm
+		nasm -f elf $< -o $@ 
+%.img : boot/boot.com boot/boot2.com
+		dd if=boot/boot.com of=$@ bs=512 count=1
+		dd if=boot/boot2.com of=$@ bs=512 seek=1
+%.com : %.asm
+		nasm -f bin $< -I "boot/" -o $@
 clean:
-		rm *.com *.o *.bin boot.img
+		rm -fr *.com *.o *.bin os.img *.dis 
+		rm -fr kernel/*.o kernel/*.bin boot/*.com boot/*.img drivers/*.o
