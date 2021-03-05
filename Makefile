@@ -1,6 +1,7 @@
 c_sources = $(wildcard kernel/*.c drivers/*.c)
 headers = $(wildcard kernel/*.h drivers/*.h)
 obj = ${c_sources:.c=.o}
+.PHONY : clean
 all : os.img
 run : all
 		qemu-system-x86_64 -s -drive format=raw,file=os.img
@@ -18,5 +19,4 @@ os.img : boot/boot.img kernel/kernel.bin
 %.com : %.asm
 		nasm -f bin $< -I "boot/" -o $@
 clean:
-		rm -fr *.com *.o *.bin os.img *.dis 
-		rm -fr kernel/*.o kernel/*.bin boot/*.com boot/*.img drivers/*.o
+		rm -fr *.com *.o *.bin os.img *.dis kernel/*.o kernel/*.bin boot/*.com boot/*.img drivers/*.o
