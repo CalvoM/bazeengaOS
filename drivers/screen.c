@@ -34,10 +34,27 @@ void kmonitor_at(char *msg, int col, int row){
 int print_char_t(char chr, char attr, int col, int row){
 	unsigned char *video_mem = (unsigned char*) video_addr;
 	if(!attr) attr = white_on_black;
-	int offset = get_screen_offset(col,row);
+	int screen_size = max_cols * max_rows;
+	if(col > max_cols || row > max_rows){//print beyond screen
+		clear_screen();
+		print_char_t('E',red_on_black,0,0);
+		return get_screen_offset(col,row);
+	}
+	int offset; 
+	if(col >= 0 && row >= 0){
+		offset = get_screen_offset(col,row);
+	}else{
+		offset = get_cursor();
+	}
+	if (chr == '\n'){
+		row = get_screen_offset_row(offset);//get row
+		offset = get_screen_offset(0,row+1);//update offset
+	}else{
 	video_mem[offset] = chr;
 	video_mem[offset+1] = attr;
 	offset+=2;
+	}
+	set_cursor(offset);
 	return offset;
 }
 int get_screen_offset(int col, int row){
@@ -61,6 +78,14 @@ int get_cursor(){
 	return 2*offset;
 }
 
+void set_cursor(int offset){
+	offset /=2;
+	port_byte_out(reg_screen_ctrl, get_high_byte);
+	port_byte_out(reg_screen_data,offset>>8);
+	port_byte_out(reg_screen_ctrl,get_low_byte);
+	port_byte_out(reg_screen_data,offset);
+
+}
 void clear_screen(){
 	int screen_size = max_cols * max_rows;
 	char *video_mem = (char *)video_addr;

@@ -2,6 +2,7 @@
 #define max_rows 25
 #define max_cols 80
 #define white_on_black 0x0f
+#define red_on_black 0x04
 
 #define reg_screen_ctrl 0x3d4
 #define reg_screen_data 0x3d5
