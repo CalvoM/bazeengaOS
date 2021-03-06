@@ -3,3 +3,4 @@
 bochsout.txt
 *.ini
 *.swp
+.*.py

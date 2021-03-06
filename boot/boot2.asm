@@ -14,7 +14,7 @@ load_kernel:
     mov si,kern_msg
     call print_msg
     mov bx,0x1000
-    mov dh,1
+    mov dh,10
     mov cl,3;sector to load
     mov dl,[boot_drive]
     call cls
