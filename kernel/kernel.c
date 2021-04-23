@@ -1,11 +1,12 @@
 #include "../drivers/screen.h"
+#include "../cpu/idt.h"
+#include "../cpu/isr.h"
 void dummy(){
 
 }
 void main(){
 	clear_screen();
-	int i=0;
-	while(i++<25){
-	kmonitor("Hey There! tell me something about you \n");
-	}
+	isr_setup();
+	__asm__ __volatile__("int $2");
+	__asm__ __volatile__("int $3");
 }

@@ -5,7 +5,7 @@ void set_idt_entry(int n, u32 handler){
 	idt[n].offset_low = low_16(handler);
 	idt[n].selector =CODE_SEG;
 	idt[n].null_byte = 0;
-	idt[n].flags = (u8)0x10001110;
+	idt[n].flags = 0b10001110;
 	idt[n].offset_high = high_16(handler);
 }
 

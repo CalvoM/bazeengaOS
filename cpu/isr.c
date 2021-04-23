@@ -35,6 +35,7 @@ void isr_setup(){
 	set_idt_entry(29, (u32)isr29);
 	set_idt_entry(30, (u32)isr30);
 	set_idt_entry(31, (u32)isr31);
+	set_idt();
 }
 
 	//Exception messages
