@@ -6,7 +6,7 @@ gdt_code:;code segment descriptor
     dw 0xffff ;Limit
     dw 0x0 ;Base Address
     db 0x0 ;Base Address
-    db 10011010b ;P[1]-DPL[2]-S[1]-Type[4]
+    db 10011010b ;P[1]-DPL[2]-S[1]-Type[4] P->Present DPL-Privilege 
     db 11001111b ;G[1]-DB[1]-0-0-Limit[4] With granularity 1 means (0xfffff)*(4*1024);4gb
     db 0x0
 
