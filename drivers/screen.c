@@ -109,14 +109,14 @@ int handle_scrolling(int offset){
 	}
 	//move the rows upwards
 	int i;
-	for(i = 0; i < max_rows; i++){
+	for(i = 1; i < max_rows; i++){
 		memory_copy(&video_mem[get_screen_offset(0,i)],
 				&video_mem[get_screen_offset(0,i-1)],
 					max_cols*2);
 	}
 	char *last_line = &video_mem[get_screen_offset(0,max_rows-1)];
 	for(i=0;i<max_cols*2;i++){
-		last_line[i] = '-';
+		last_line[i] = 0;
 	}
 	offset -= 2*max_cols;
 	return offset;

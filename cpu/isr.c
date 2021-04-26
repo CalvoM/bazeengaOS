@@ -2,6 +2,8 @@
 #include "isr.h"
 #include "idt.h"
 
+isr_t interrupt_handlers[256];
+
 void isr_setup(){
 	set_idt_entry(0, (u32)isr0);
 	set_idt_entry(1, (u32)isr1);
@@ -35,6 +37,34 @@ void isr_setup(){
 	set_idt_entry(29, (u32)isr29);
 	set_idt_entry(30, (u32)isr30);
 	set_idt_entry(31, (u32)isr31);
+
+	//Initialize the PIC with remap	
+	port_byte_out(PIC_MST_CMD_ADDR,ICW1);
+	port_byte_out(PIC_SLV_CMD_ADDR,ICW1);
+	port_byte_out(PIC_MST_DATA_ADDR, ICW2_MST);
+	port_byte_out(PIC_SLV_DATA_ADDR,ICW2_SLV);
+	port_byte_out(PIC_MST_DATA_ADDR, ICW3_MST);
+	port_byte_out(PIC_SLV_DATA_ADDR,ICW3_SLV);
+	port_byte_out(PIC_MST_DATA_ADDR, 0x01);
+	port_byte_out(PIC_SLV_DATA_ADDR,0x01);
+	port_byte_out(PIC_MST_DATA_ADDR, 0x00);
+	port_byte_out(PIC_SLV_DATA_ADDR,0x00);
+	set_idt_entry(32, (u32)irq0);
+	set_idt_entry(33, (u32)irq1);
+	set_idt_entry(34, (u32)irq2);
+	set_idt_entry(35, (u32)irq3);
+	set_idt_entry(36, (u32)irq4);
+	set_idt_entry(37, (u32)irq5);
+	set_idt_entry(38, (u32)irq6);
+	set_idt_entry(39, (u32)irq7);
+	set_idt_entry(40, (u32)irq8);
+	set_idt_entry(41, (u32)irq9);
+	set_idt_entry(42, (u32)irq10);
+	set_idt_entry(43, (u32)irq11);
+	set_idt_entry(44, (u32)irq12);
+	set_idt_entry(45, (u32)irq13);
+	set_idt_entry(46, (u32)irq14);
+	set_idt_entry(47, (u32)irq15);
 	set_idt();
 }
 
@@ -81,3 +111,16 @@ void isr_handler(registers_t r){
 	kmonitor("\n\r");
 }
 
+void register_interrupt_handler(u8 n, isr_t handler){
+	interrupt_handlers[n] = handler;
+}
+
+void irq_handler(registers_t r){
+	if(r.interrupt_no >= ICW2_SLV) port_byte_out(PIC_SLV_CMD_ADDR, EOI_CMD);
+	port_byte_out(PIC_MST_CMD_ADDR,EOI_CMD);
+
+	if(interrupt_handlers[r.interrupt_no] != 0){
+		isr_t handler = interrupt_handlers[r.interrupt_no];
+		handler(r);
+	}
+}
