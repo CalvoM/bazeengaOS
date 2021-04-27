@@ -54,6 +54,9 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
+#define TIMER_IRQ 0x20
+#define KBD_IRQ 0x21
+
 // Contains the registers saved on stack during interrupt call.
 // The fields are in reverse order of pushing
 typedef struct{
