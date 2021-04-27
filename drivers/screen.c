@@ -55,7 +55,6 @@ int print_char_t(char chr, char attr, int col, int row){
 	video_mem[offset+1] = attr;
 	offset+=2;
 	}
-	set_cursor(offset);
 	return handle_scrolling(offset); 
 }
 int get_screen_offset(int col, int row){
@@ -105,6 +104,7 @@ int handle_scrolling(int offset){
 	char *video_mem = (char *)video_addr;
 	//make sure offset is beyond screen offset
 	if(offset < screen_size*2){
+		set_cursor(offset);
 		return offset;
 	}
 	//move the rows upwards
@@ -119,5 +119,6 @@ int handle_scrolling(int offset){
 		last_line[i] = 0;
 	}
 	offset -= 2*max_cols;
+	set_cursor(offset);
 	return offset;
 }
