@@ -10,12 +10,13 @@ int handle_scrolling(int offset);
 int get_screen_offset_col(int offset);
 void print_at(char* message, int col, int row);
 int get_screen_offset(int col,int row);
-
+static char bckspc = 0;
 void kmonitor(char *msg){
 	kmonitor_at(msg,-1,-1);
 }
 
 void kmonitor_at(char *msg, int col, int row){
+	bckspc =0;
 	int offset;
 	if(col >= 0 && row >=0) 
 		offset = get_screen_offset(col,row);
@@ -30,6 +31,14 @@ void kmonitor_at(char *msg, int col, int row){
 		row = get_screen_offset_row(offset);
 		col = get_screen_offset_col(offset);
 	}
+}
+
+void kmonitor_backspace(){
+	bckspc=1;
+	int offset = get_cursor() - 2;
+	int r = get_screen_offset_row(offset);
+	int c = get_screen_offset_col(offset);
+	print_char_t(0x08,white_on_black,c,r);
 }
 
 int print_char_t(char chr, char attr, int col, int row){
@@ -53,7 +62,7 @@ int print_char_t(char chr, char attr, int col, int row){
 	}else{
 	video_mem[offset] = chr;
 	video_mem[offset+1] = attr;
-	offset+=2;
+	if (bckspc == 0)offset+=2;
 	}
 	return handle_scrolling(offset); 
 }

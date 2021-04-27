@@ -12,4 +12,5 @@
 void clear_screen();
 void kmonitor_at(char * msg, int col, int row);
 void kmonitor(char *msg);
+void kmonitor_backspace();
 #endif

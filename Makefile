@@ -1,5 +1,5 @@
-c_sources = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-headers = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+c_sources = $(wildcard kernel/*.c drivers/*.c cpu/*.c shell/*.c)
+headers = $(wildcard kernel/*.h drivers/*.h cpu/*.h shell/*.h)
 obj = ${c_sources:.c=.o cpu/interrupts.o}
 .PHONY : clean
 all : os.img

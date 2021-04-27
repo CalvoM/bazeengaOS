@@ -10,5 +10,4 @@ void main(){
 	isr_setup();
 	__asm__("sti");
 	init_kbd();
-	init_timer(50);
 }
