@@ -6,9 +6,9 @@ set_screen_size:
 clear_screen:
     mov ah,0x07
     mov al,0x00
-    mov bh,0xe0 
+    mov bh,0x0e 
     mov dh,30
-    mov dl,79
+    mov dl,80
     int 0x10
     ret
 set_cursor_center:
@@ -45,8 +45,7 @@ load_second_bootloader:
 	mov al, dh ;number of sector to read
 	mov ch, 0x00;cylinder no.
 	mov dh, 0x00;head number
-	mov cl, 0x03;sector no. since boot.asm has 2 sectors mbr+512 bytes of 0x00
-    ;mov dl,[boot_drive];drive number
+	mov cl, 0x02;sector no. since the 1st sector contains MBR
 	int 0x13
     jc disk_error
     pop dx
