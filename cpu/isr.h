@@ -39,14 +39,13 @@ extern void isr31();
 
 // Contains the registers saved on stack during interrupt call.
 // The fields are in reverse order of pushing
-typedef struct{
-	u32 ds;
-	u32 edi,esi,ebp,esp,ebx,edx,ecx,eax;
-	u32 interrupt_no, err_code;
-	u32 eip,cs,eflags,curr_sp,ss; //automatically saves internally by CPU
-}registers_t;
+typedef struct {
+  u32 ds;
+  u32 edi, esi, ebp, esp, ebx, edx, ecx, eax;
+  u32 interrupt_no, err_code;
+  u32 eip, cs, eflags, curr_sp, ss; // automatically saves internally by CPU
+} registers_t;
 
 void isr_setup();
 void isr_handler(registers_t r);
 #endif
-
