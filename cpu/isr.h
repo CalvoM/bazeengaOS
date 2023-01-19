@@ -3,6 +3,13 @@
 
 #include "types.h"
 
+#define ISR_IRQ0 0X20    // irq remmapped start
+#define ISR_NUM 0x10     // number of irqs registered
+#define ISR_SYSCALL 0x80 // syscall irq
+
+#define IRQ_TIMER 0
+#define IRQ_KEYBOARD 1
+
 // Reserved CPU exceptions
 extern void isr0();
 extern void isr1();
@@ -20,22 +27,6 @@ extern void isr12();
 extern void isr13();
 extern void isr14();
 extern void isr15();
-extern void isr16();
-extern void isr17();
-extern void isr18();
-extern void isr19();
-extern void isr20();
-extern void isr21();
-extern void isr22();
-extern void isr23();
-extern void isr24();
-extern void isr25();
-extern void isr26();
-extern void isr27();
-extern void isr28();
-extern void isr29();
-extern void isr30();
-extern void isr31();
 
 // Contains the registers saved on stack during interrupt call.
 // The fields are in reverse order of pushing
@@ -48,4 +39,6 @@ typedef struct {
 
 void isr_setup();
 void isr_handler(registers_t r);
+void fault_handler(registers_t r);
+void fault_init();
 #endif
