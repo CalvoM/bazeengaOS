@@ -1,8 +1,10 @@
 #include "isr.h"
 #include "../drivers/screen.h"
 #include "idt.h"
+#include "pic.h"
 
 void isr_setup() {
+  PIC_remap(ISR_IRQ0, ISR_IRQ0 + 8);
   set_idt_entry(ISR_IRQ0, (u32)isr0);
   set_idt_entry(ISR_IRQ0 + IRQ_KEYBOARD, (u32)isr1);
   set_idt_entry(ISR_IRQ0 + 2, (u32)isr2);
