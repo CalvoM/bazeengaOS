@@ -4,3 +4,8 @@ bochsout.txt
 *.ini
 *.swp
 .*.py
+
+
+# Added by cargo
+
+/target
