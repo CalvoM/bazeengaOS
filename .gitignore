@@ -8,4 +8,4 @@ bochsout.txt
 
 # Added by cargo
 
-/target
+target/
