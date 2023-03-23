@@ -1,0 +1,4 @@
+run:build
+    qemu-system-x86_64 -drive format=raw,file=target/x86_64-bazeenga_os/debug/bootimage-bazeengaOS.bin 
+build:
+    cargo bootimage --target x86_64-bazeenga_os.json
