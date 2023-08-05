@@ -22,7 +22,7 @@ jobs:
           components: rust-src
     - name: Build
       run: cd rust && cargo build --verbose
-    - name: Start SSH session
+    - name: Start SSH session on failure
       if: ${{ failure() }}
       uses: luchihoratiu/debug-via-ssh@main
       with:
@@ -39,10 +39,10 @@ jobs:
           override: true
           components: rust-src, llvm-tools-preview
     - name: Install qemu-system-x86 && boot image
-      run: sudo apt install qemu-system-x86 && cargo install bootimage
+      run: sudo apt update && sudo apt install qemu-system-x86 && cargo install bootimage
     - name: Run tests
       run: cd rust && cargo test --verbose
-    - name: Start SSH session
+    - name: Start SSH session on failure
       if: ${{ failure() }}
       uses: luchihoratiu/debug-via-ssh@main
       with:
